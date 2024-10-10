@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operações com Java</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Operações com Java</h1>
+    <div class="container">
+        <button onclick="contagemAprovados()">Contagem de Aprovados</button>
+        <button onclick="fibonacci()">Fibonacci</button>
+        <button onclick="mdc()">MDC</button>
+        <button onclick="numeroPrimo()">Número Primo</button>
+        <button onclick="ordenacao()">Ordenação</button>
+        <button onclick="somador()">Somador</button>
+        <button onclick="trocaVariaveis()">Troca de Variáveis</button>
+    </div>
+
+    <div id="result"></div>
+
+    <script>
+        const apiBase = 'http://localhost:8080/api/operacoes';
+
+        async function fetchAPI(url, options) {
+            const response = await fetch(url, options);
+            const result = await response.text();
+            document.getElementById("result").innerHTML = result;
+        }
+
+        function contagemAprovados() {
+            const quantidade = prompt("Quantidade de alunos:");
+            const notas = prompt("Notas dos alunos (separadas por vírgula):").split(',').map(Number);
+            fetchAPI(`${apiBase}/contagem-aprovados?quantidade=${quantidade}&notas=${notas.join(",")}`);
+        }
+
+        function fibonacci() {
+            const termos = prompt("Digite a quantidade de termos:");
+            fetchAPI(`${apiBase}/fibonacci?termos=${termos}`);
+        }
+
+        function mdc() {
+            const a = prompt("Digite o primeiro número:");
+            const b = prompt("Digite o segundo número:");
+            fetchAPI(`${apiBase}/mdc?a=${a}&b=${b}`);
+        }
+
+        function numeroPrimo() {
+            const numero = prompt("Digite o número:");
+            fetchAPI(`${apiBase}/numero-primo?numero=${numero}`);
+        }
+
+        function ordenacao() {
+            const vetor = prompt("Digite os números do vetor (separados por vírgula):").split(',').map(Number);
+            fetchAPI(`${apiBase}/ordenacao`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(vetor)
+            });
+        }
+
+        function somador() {
+            const numeros = prompt("Digite os números para somar (separados por vírgula):").split(',').map(Number);
+            fetchAPI(`${apiBase}/somador`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(numeros)
+            });
+        }
+
+        function trocaVariaveis() {
+            const a = prompt("Digite o valor de a:");
+            const b = prompt("Digite o valor de b:");
+            fetchAPI(`${apiBase}/troca-variaveis?a=${a}&b=${b}`);
+        }
+    </script>
+</body>
+</html>
